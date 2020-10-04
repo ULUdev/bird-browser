@@ -10,3 +10,5 @@
 <li>password manager integration</li>
 </ul>
 <p>some of these features weren't done by me before</p>
+<h2>License</h2>
+<p>if this project gets released at some point the License will probably be the GNU-GPL 3</p>
