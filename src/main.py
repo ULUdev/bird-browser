@@ -17,7 +17,7 @@ from pathlib import Path
 NetworkFilter = adblock.RequestManager()
 NetworkFilter.setup("birdlib/easylist.txt")
 try:
-    with open(f"{Path.home()}/.config/bird/bird.config.json") as file:
+    with open(f"{Path.home()}/.config/bird/bird.config.json", "r") as file:
         config = json.load(file)
 except:
     if not Path(f"{Path.home}/.config/bird").exists():
@@ -53,7 +53,7 @@ class MainWindow(QMainWindow):
 
         self.show()
 
-    def updatewin(self, browser):
+    def updatewin(self, arg_1, browser):
         url = self.url[str(self.tabs.currentIndex)]
         if url.startswith("search://"):
             search = url.split("search://", 1)[1]
@@ -72,7 +72,7 @@ class MainWindow(QMainWindow):
                     url = "https://" + url
         elif not url.startswith("https://") or not url.startswith("http://"):
             url = "https://" + url
-        browser.load(QUrl(url))
+        browser.page().load(QUrl(url))
     def updatetext(self, text:str):
         self.url[str(self.tabs.currentIndex)] = text
     def updateurl(self, url, bar):
@@ -103,8 +103,10 @@ class MainWindow(QMainWindow):
         browser = QWebEngineView()
         backbtn = QPushButton("←")
         reloadbtn = QPushButton("reload")
+        gotocurrenturlbutton = QPushButton("go!")
+        gotocurrenturlbutton.clicked.connect(lambda  browser = browser: self.updatewin(True, browser))
         reloadbtn.clicked.connect(browser.reload)
-        bar.returnPressed.connect(lambda browser = browser: self.updatewin(browser))
+        bar.returnPressed.connect(lambda  browser = browser: self.updatewin(True, browser))
         bar.textChanged.connect(self.updatetext)
         browser.load(QUrl(config["startup-url"]))
         browser.page().urlChanged.connect(lambda qurl, bar = bar: self.updateurl(qurl, bar))
@@ -114,8 +116,9 @@ class MainWindow(QMainWindow):
         backbtn.clicked.connect(browser.back)
         layout.addWidget(bar, 1, 3)
         layout.addWidget(reloadbtn, 1, 2)
-        layout.addWidget(browser, 2, 1, 1, 3)
+        layout.addWidget(browser, 2, 1, 1, 4)
         layout.addWidget(backbtn, 1, 1)
+        layout.addWidget(gotocurrenturlbutton, 1, 4)
         self.tabs.addTab(widget, browser.icon(), browser.title())
         self.tabs.setCurrentIndex(self.tabs.count() -1)
 
