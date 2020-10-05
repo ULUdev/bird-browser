@@ -8,6 +8,8 @@
 <li>search engine integration</li>
 <li>source-code view</li>
 <li>password manager integration</li>
+<li>bookmarks</li>
+<li>configuration</li>
 </ul>
 <p>some of these features weren't done by me before</p>
 <h2>License</h2>
