@@ -12,5 +12,9 @@
 <li>configuration</li>
 </ul>
 <p>some of these features weren't done by me before</p>
+<p>This Project also has an Adblocker build into it. This adblocker uses the easylist.txt file to filter requests</p>
+<p>to manually update <b>only</b> the easylist file use:</p>
+<code>curl https://easylist.to/easylist/easylist.txt > easylist.txt</code>
+<p>make shure that you are in the right directory (birdlib)</p>
 <h2>License</h2>
 <p>if this project gets released at some point the License will probably be the GNU-GPL 3</p>

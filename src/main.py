@@ -14,11 +14,14 @@ from pathlib import Path
 
 
 #setup
-NetworkFilter = adblock.RequestManager("birdlib/easylist.txt")
+NetworkFilter = adblock.RequestManager()
+NetworkFilter.setup("birdlib/easylist.txt")
 try:
     with open(f"{Path.home()}/.config/bird/bird.config.json") as file:
         config = json.load(file)
 except:
+    if not Path(f"{Path.home}/.config/bird").exists():
+        Path(f"{Path.home()}/.config/bird").mkdir()
     with open(f"{Path.home()}/.config/bird/bird.config.json", "w+") as file:
         file.write(json.dumps(
             {
@@ -65,7 +68,8 @@ class MainWindow(QMainWindow):
                 else:
                     pass
             else:
-                url = "https://" + url
+                if not url.startswith("https://") or not url.startswith("http://"):
+                    url = "https://" + url
         elif not url.startswith("https://") or not url.startswith("http://"):
             url = "https://" + url
         browser.load(QUrl(url))
