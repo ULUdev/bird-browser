@@ -5,21 +5,21 @@ from PyQt5.QtGui import *
 from PyQt5 import uic
 from PyQt5.QtWebEngineWidgets import QWebEngineView
 #local
-from lib import adblock
-#from lib import bookmarks as bmks
+from birdlib import adblock
+#from birdlib import bookmarks as bmks
 #additional
 import sys
 import json
-import os
+from pathlib import Path
 
 
 #setup
-NetworkFilter = adblock.RequestManager("lib/easylist.txt")
+NetworkFilter = adblock.RequestManager("birdlib/easylist.txt")
 try:
-    with open(f"/home/{os.getlogin()}/.config/bird/bird.config.json") as file:
+    with open(f"{Path.home()}/.config/bird/bird.config.json") as file:
         config = json.load(file)
 except:
-    with open(f"/home/{os.getlogin()}/.config/bird/bird.config.json", "w+") as file:
+    with open(f"{Path.home()}/.config/bird/bird.config.json", "w+") as file:
         file.write(json.dumps(
             {
                 "search-engine": "https://duckduckgo.com/?q={search}",
