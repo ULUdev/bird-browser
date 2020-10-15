@@ -1,21 +1,31 @@
-#pyqt
+#PyQt5
 from PyQt5.QtCore import *
-from PyQt5.QtWidgets import *
+from PyQt5.QtWidgets import QPushButton, QTabWidget, QMainWindow, QLineEdit, QGridLayout, QGridLayout, QWidget, QApplication
 from PyQt5.QtGui import *
 from PyQt5 import uic
 from PyQt5.QtWebEngineWidgets import QWebEngineView
-#local
+#local imports
 from birdlib import adblock
-#from birdlib import bookmarks as bmks
-#additional
+from birdlib import bookmarks as bmk
+#additional imports
 import sys
 import json
 from pathlib import Path
+import sqlite3 as sql
 
 
 #setup
 NetworkFilter = adblock.RequestManager()
-NetworkFilter.setup("birdlib/easylist.txt")
+try:
+    NetworkFilter.setup("birdlib/easylist.txt")
+except:
+    NetworkFilter.setup(f"{Path.home()}/bin/birdlib/easylist.txt")
+conn = sql.connect(f"{Path.home()}/.config/bird/database.db")
+cursor = conn.cursor()
+try:
+    bmk.setupDatabase(cursor)
+except:
+    pass
 try:
     with open(f"{Path.home()}/.config/bird/bird.config.json", "r") as file:
         config = json.load(file)
@@ -41,6 +51,16 @@ class MainWindow(QMainWindow):
         self.tabs = self.findChild(QTabWidget, "tabs")
         self.tabcreate = self.findChild(QPushButton, "tabcreate")
 
+        if "style" in config:
+            innerstyle = f"""
+                    color: {config['style']['color']};
+                    background-color: {config['style']['background-color']};
+            """
+            self.setStyleSheet(f"""
+                QMainWindow{
+                    {innerstyle}
+                }
+                    """)
         self.tabs.clear()
 
         self.tabs.setTabsClosable(True)
@@ -53,12 +73,31 @@ class MainWindow(QMainWindow):
 
         self.show()
 
-    def updatewin(self, arg_1, browser):
+    def updatewin(self, browser:QWebEngineView, boolean=True):
         url = self.url[str(self.tabs.currentIndex)]
         if url.startswith("search://"):
             search = url.split("search://", 1)[1]
             url = config["search-engine"].format(search=search)
-
+        elif url.startswith("bookmarks://"):
+            try:
+                name = url.split("bookmarks://", 1)[1]
+                url = bmk.getBookmark(cursor, name)[name]
+            except ValueError:
+                url = "about:blank"
+        elif url.startswith("bookmark://"):
+            if not "|" in url.split("bookmark://", 1)[1]:
+                url = "about:blank"
+            else:
+                parts = url.split("bookmark://", 1)[1].split("|")
+                if parts[1] == "-":
+                    parts[1] = browser.url().toString()
+                try:
+                    bmk.getBookmark(cursor, parts[0])
+                    bmk.modifyBookmark(cursor, parts[0], parts[0], parts[1])
+                    conn.commit()
+                except:
+                    bmk.addBookmark(cursor, parts[0], parts[1])
+                    conn.commit()
         elif "additional-search-engines" in config:
             for source in config["additional-search-engines"]:
                 if url.startswith(source):
@@ -68,16 +107,16 @@ class MainWindow(QMainWindow):
                 else:
                     pass
             else:
-                if not url.startswith("https://") or not url.startswith("http://"):
-                    url = "https://" + url
-        elif not url.startswith("https://") or not url.startswith("http://"):
-            url = "https://" + url
+                 if not url.startswith("https://") and not url.startswith("http://"):
+                     url = "http://" + url
+        elif not url.startswith("https://") and not url.startswith("http://"):
+            url = "http://" + url
         browser.page().load(QUrl(url))
     def updatetext(self, text:str):
         self.url[str(self.tabs.currentIndex)] = text
     def updateurl(self, url, bar):
         bar.setText(url.toString())
-
+ 
     def updatetab(self, arg_1, index, browser):
         if len(browser.page().title()) > 20:
             self.tabs.setTabText(index , browser.page().title()[0:20] + "...")
@@ -104,9 +143,9 @@ class MainWindow(QMainWindow):
         backbtn = QPushButton("←")
         reloadbtn = QPushButton("reload")
         gotocurrenturlbutton = QPushButton("go!")
-        gotocurrenturlbutton.clicked.connect(lambda  browser = browser: self.updatewin(True, browser))
+        gotocurrenturlbutton.clicked.connect(lambda clicked, browser = browser: self.updatewin(browser, clicked))
         reloadbtn.clicked.connect(browser.reload)
-        bar.returnPressed.connect(lambda  browser = browser: self.updatewin(True, browser))
+        bar.returnPressed.connect(lambda  browser = browser: self.updatewin(browser, True))
         bar.textChanged.connect(self.updatetext)
         browser.load(QUrl(config["startup-url"]))
         browser.page().urlChanged.connect(lambda qurl, bar = bar: self.updateurl(qurl, bar))
@@ -126,3 +165,4 @@ class MainWindow(QMainWindow):
 app = QApplication(sys.argv)
 window = MainWindow()
 app.exec_()
+conn.close()

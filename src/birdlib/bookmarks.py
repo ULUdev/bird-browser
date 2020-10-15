@@ -29,10 +29,14 @@ def getBookmarks(cursor):
 def getBookmark(cursor, name:str):
     cursor.execute(f"select * from bookmarks where name='{name}'")
     res = cursor.fetchall()
-    if res == None:
+    if len(res) == 0:
         raise ValueError(f"name doesnt exist")
     else:
+        res = res[0]
         dict = {}
         dict[res[0]] = res[1]
     return dict
-
+def addBookmark(cursor, name:str, url:str):
+    cursor.execute(f"insert into bookmarks values ('{name}', '{url}')")
+def modifyBookmark(cursor, name:str, newname:str, newurl:str):
+    cursor.execute(f"update bookmarks set name = '{newname}', url = '{newurl}' where name = '{name}'")

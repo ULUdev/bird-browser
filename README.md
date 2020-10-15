@@ -16,5 +16,7 @@
 <p>to manually update <b>only</b> the easylist file use:</p>
 <code>curl https://easylist.to/easylist/easylist.txt > easylist.txt</code>
 <p>make shure that you are in the right directory (birdlib)</p>
+<h2>Wiki</h2>
+<p>the wiki/manual/cheatsheet can be found <a href="https://github.com/ULUdev/bird-browser/wiki">here</a></p>
 <h2>License</h2>
 <p>if this project gets released at some point the License will probably be the GNU-GPL 3</p>
