@@ -1,7 +1,7 @@
 from setuptools import setup
 setup(
     name="birdlib",
-    version="1.0.0",
+    version="1.0.1",
     description="the library for bird-browser",
     url="https://github.com/ULUdev/bird-browser",
     author="ULUdev",

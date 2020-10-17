@@ -6,7 +6,7 @@ README = (HERE / "README.md").read_text()
 
 setup(
     name="bird-browser",
-    version="1.0.0",
+    version="1.0.1",
     description="a simple browser written in python with a lot of implementations",
     long_description=README,
     long_description_content_type="text/markdown",
