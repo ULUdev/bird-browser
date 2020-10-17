@@ -11,12 +11,10 @@
 <li>bookmarks</li>
 <li>configuration</li>
 </ul>
-<p>some of these features weren't done by me before</p>
-<p>This Project also has an Adblocker build into it. This adblocker uses the easylist.txt file to filter requests</p>
-<p>to manually update <b>only</b> the easylist file use:</p>
-<code>curl https://easylist.to/easylist/easylist.txt > easylist.txt</code>
-<p>make shure that you are in the right directory (birdlib)</p>
+<p>some of these features weren't done by me before
+This Project also has an Adblocker build into it.
+</p>
 <h2>Wiki</h2>
 <p>the wiki/manual/cheatsheet can be found <a href="https://github.com/ULUdev/bird-browser/wiki">here</a></p>
 <h2>License</h2>
-<p>if this project gets released at some point the License will probably be the GNU-GPL 3</p>
+<p><b>GNU GPL 3</b> for more information see the LICENSE file</p>

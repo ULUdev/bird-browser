@@ -8,10 +8,10 @@ from PyQt5.QtWebEngineWidgets import QWebEngineView
 from birdlib import adblock
 from birdlib import bookmarks as bmk
 #additional imports
-import sys
 import json
-from pathlib import Path
 import sqlite3 as sql
+import sys
+from pathlib import Path
 
 
 #setup
@@ -19,7 +19,7 @@ NetworkFilter = adblock.RequestManager()
 try:
     NetworkFilter.setup("birdlib/easylist.txt")
 except:
-    NetworkFilter.setup(f"{Path.home()}/bin/birdlib/easylist.txt")
+    NetworkFilter.setup()
 conn = sql.connect(f"{Path.home()}/.config/bird/database.db")
 cursor = conn.cursor()
 try:
@@ -30,7 +30,7 @@ try:
     with open(f"{Path.home()}/.config/bird/bird.config.json", "r") as file:
         config = json.load(file)
 except:
-    if not Path(f"{Path.home}/.config/bird").exists():
+    if not Path(f"{Path.home}/.config/bird/").exists():
         Path(f"{Path.home()}/.config/bird").mkdir()
     with open(f"{Path.home()}/.config/bird/bird.config.json", "w+") as file:
         file.write(json.dumps(
@@ -162,7 +162,8 @@ class MainWindow(QMainWindow):
         self.tabs.setCurrentIndex(self.tabs.count() -1)
 
 #main process
-app = QApplication(sys.argv)
-window = MainWindow()
-app.exec_()
-conn.close()
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+    window = MainWindow()
+    app.exec_()
+    conn.close()

@@ -1,4 +1,5 @@
 import random
+import sqlite3 as sql
 def encrypt(key:int, pwd:str):
     crlist = []
     for i in pwd:
@@ -19,3 +20,5 @@ def decrypt(key:int, pwd:str):
     return resstr
 def keygen():
     return random.randint(10000, 1000000)
+def setupDatabase(cursor):
+

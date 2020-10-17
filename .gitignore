@@ -4,5 +4,10 @@ lib
 share
 lib64
 pyvenv.cfg
-*/__pycache__/
-*/__pycache__/*
+__pycache__
+__pycache__
+dist
+build
+bird_browser.egg-info
+birdlib.egg-info
+

@@ -1,6 +1,7 @@
 from PyQt5.QtWebEngineCore import QWebEngineUrlRequestInterceptor
 from PyQt5.QtWebEngineWidgets import QWebEnginePage
 from PyQt5.QtCore import *
+import requests
 
 class RequestManager(QWebEngineUrlRequestInterceptor):
     """
@@ -9,15 +10,14 @@ class RequestManager(QWebEngineUrlRequestInterceptor):
     """
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-    def setup(self, blacklistfile:str):
-        self.blist = []
-        with open(blacklistfile) as file:
-            for line in file.readlines():
-                line = line.strip()
-                if line.startswith("!") or line.startswith("##") or line.startswith("["):
-                    continue
-                else:
-                    self.blist.append(line)
+    def setup(self):
+        res = requests.get("https://easylist.to/easylist/easylist.txt").content.decode()
+        self.blist = res.split("\n")
+        for i in self.blist:
+            if i.startswith("!") or i.startswith("##") or i.startswith("["):
+                self.blist.remove(i)
+        del self.blist[len(self.blist)-1]
+
 
     def interceptRequest(self, info):
         requrl = info.requestUrl().toString()
