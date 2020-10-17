@@ -15,13 +15,14 @@ build:
         stage: build
         script:
                 - python3 setup.py sdist bdist_wheel
+                - ls -alR
         rules:
                 - if: '$CI_COMMIT_BRANCH == "release"'
 deploy:
         stage: deploy
         script:
                 - TWINE_PASSWORD=$pypi_access TWINE_USERNAME=__token__ python3 -m twine upload dist/*
-                - TWINE_PASSWORD=$CI_JOB_TOKEN TWINE_USERNAME=gitlab-ci-token python3 -m twine upload --repository-url https://gitlab.sokoll.com/api/v4/projects/$CI_PROJECT_ID/packages/pypi dist/*
+                - TWINE_PASSWORD=${CI_JOB_TOKEN} TWINE_USERNAME=gitlab-ci-token python3 -m twine upload --repository-url https://gitlab.sokoll.com/api/v4/projects/${CI_PROJECT_ID}/packages/pypi dist/*
         rules:
                 - if: '$CI_COMMIT_BRANCH == "release"'
 test birdlib:
@@ -40,7 +41,7 @@ deploy birdlib:
         stage: deploy
         script:
                 - cd bird-browser
-                - TWINE_PASSWORD=$CI_JOB_TOKEN TWINE_USERNAME=gitlab-ci-token python3 -m twine upload --repository-url https://gitlab.sokoll.com/api/v4/projects/$CI_PROJECT_ID/packages/pypi dist/*
+                - TWINE_PASSWORD=${CI_JOB_TOKEN} TWINE_USERNAME=gitlab-ci-token python3 -m twine upload --repository-url https://gitlab.sokoll.com/api/v4/projects/${CI_PROJECT_ID}/packages/pypi dist/*
                 - TWINE_PASSWORD=$pypi_access TWINE_USERNAME=__token__ python3 -m twine upload dist/*
         rules:
                 - if: '$CI_COMMIT_BRANCH == "release"'
