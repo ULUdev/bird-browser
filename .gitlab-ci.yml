@@ -19,6 +19,7 @@ test:
 build:
         stage: build
         script:
+                - rm -rf dist/*
                 - python3 setup.py sdist bdist_wheel
                 - ls -al dist
         rules:
@@ -39,6 +40,7 @@ test birdlib:
 build birdlib:
         stage: build
         script:
+                - rm -rf dist/*
                 - cd bird-browser
                 - python3 setup.py sdist bdist_wheel
         rules:
