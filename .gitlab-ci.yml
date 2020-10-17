@@ -20,6 +20,8 @@ test:
 build:
         stage: build
         script:
+                - rm -rf dist/*
+                - rm -rf bird-browser/dist/*
                 - python3 setup.py sdist bdist_wheel
                 - cd bird-browser
                 - python3 setup.py sdist bdist_wheel
