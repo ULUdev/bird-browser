@@ -15,5 +15,5 @@ build:
                 - pip3 install wheel
                 - python3 setup.py sdist bdist_wheel
         rules:
-                - if: 'CI_COMMIT_BRANCH=="release"'
+                - if: '$CI_COMMIT_BRANCH == "release"'
 
