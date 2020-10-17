@@ -17,12 +17,12 @@ build:
         rules:
                 - if: '$CI_COMMIT_BRANCH == "release"'
 test birdlib:
-        stage: test birdlib
+        stage: test
         script:
                 - cd bird-browser
                 - python3 setup.py test
 build birdlib:
-        stage: build birdlib
+        stage: build
         script:
                 - python3 setup.py sdist bdist_wheel
         rules:
