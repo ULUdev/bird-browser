@@ -4,6 +4,7 @@ before_script:
         - python3 -V
         - python3 -m venv .
         - source bin/activate
+        - pip3 install wheel
 
 test:
         stage: test
@@ -12,8 +13,17 @@ test:
 build:
         stage: build
         script:
-                - pip3 install wheel
                 - python3 setup.py sdist bdist_wheel
         rules:
                 - if: '$CI_COMMIT_BRANCH == "release"'
-
+test birdlib:
+        stage: test birdlib
+        script:
+                - cd bird-browser
+                - python3 setup.py test
+build birdlib:
+        stage: build birdlib
+        script:
+                - python3 setup.py sdist bdist_wheel
+        rules:
+                - if: '$CI_COMMIT_BRANCH == "release"'
