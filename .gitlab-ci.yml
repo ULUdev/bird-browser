@@ -17,6 +17,9 @@ build:
         script:
                 - python3 setup.py sdist bdist_wheel
                 - ls -al dist
+        cache:
+                paths:
+                        - dist/*
         rules:
                 - if: '$CI_COMMIT_BRANCH == "release"'
 deploy:
@@ -37,6 +40,9 @@ build birdlib:
         script:
                 - cd bird-browser
                 - python3 setup.py sdist bdist_wheel
+        cache:
+                paths:
+                        - dist/*
         rules:
                 - if: '$CI_COMMIT_BRANCH == "release"'
 deploy birdlib:
