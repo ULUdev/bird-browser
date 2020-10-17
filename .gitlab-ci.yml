@@ -1,0 +1,19 @@
+image: python:3.8
+
+before_script:
+        - python3 -V
+        - python3 -m venv .
+        - source bin/activate
+
+test:
+        stage: test
+        script:
+                - python3 setup.py test
+build:
+        stage: build
+        script:
+                - pip3 install wheel
+                - python3 setup.py sdist bdist_wheel
+        rules:
+                - if: 'CI_COMMIT_BRANCH=="release"'
+
