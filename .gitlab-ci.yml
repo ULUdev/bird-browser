@@ -7,6 +7,10 @@ before_script:
         - pip3 install wheel
         - pip3 install twine
 
+cache:
+        paths:
+                - dist/*
+                - bird-browser/dist/*
 test:
         stage: test
         script:
@@ -17,9 +21,6 @@ build:
         script:
                 - python3 setup.py sdist bdist_wheel
                 - ls -al dist
-        cache:
-                paths:
-                        - dist/*
         rules:
                 - if: '$CI_COMMIT_BRANCH == "release"'
 deploy:
@@ -40,9 +41,6 @@ build birdlib:
         script:
                 - cd bird-browser
                 - python3 setup.py sdist bdist_wheel
-        cache:
-                paths:
-                        - dist/*
         rules:
                 - if: '$CI_COMMIT_BRANCH == "release"'
 deploy birdlib:
