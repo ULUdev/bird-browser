@@ -1,4 +1,5 @@
 import sqlite3 as sql
+from . import sqlpreproccessor as sqlp
 
 def setupDatabase(cursor):
     try:
@@ -27,8 +28,11 @@ def getBookmarks(cursor):
         dict[res[0]] = res[1]
     return dict
 def getBookmark(cursor, name:str):
-    cursor.execute(f"select * from bookmarks where name='{name}'")
-    res = cursor.fetchall()
+    try:
+        cursor.execute(sqlp.checksqlstatement(f"select * from bookmarks where name='{name}'"))
+        res = cursor.fetchall()
+    except Exception:
+        raise ValueError("name causes insecure statement")
     if len(res) == 0:
         raise ValueError(f"name doesnt exist")
     else:
@@ -37,6 +41,12 @@ def getBookmark(cursor, name:str):
         dict[res[0]] = res[1]
     return dict
 def addBookmark(cursor, name:str, url:str):
-    cursor.execute(f"insert into bookmarks values ('{name}', '{url}')")
+    try:
+        cursor.execute(sqlp.checksqlstatement("insert into bookmarks values ('{name}', '{url}')"))
+    except:
+        pass
 def modifyBookmark(cursor, name:str, newname:str, newurl:str):
-    cursor.execute(f"update bookmarks set name = '{newname}', url = '{newurl}' where name = '{name}'")
+    try:
+    cursor.execute(sqlp.checksqlstatement(f"update bookmarks set name = '{newname}', url = '{newurl}' where name = '{name}'"))
+    except:
+        pass
