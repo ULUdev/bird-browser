@@ -40,8 +40,8 @@ test birdlib:
 build birdlib:
         stage: build
         script:
-                - rm -rf dist/*
                 - cd bird-browser
+                - rm -rf dist/*
                 - python3 setup.py sdist bdist_wheel
         rules:
                 - if: '$CI_COMMIT_BRANCH == "release"'
