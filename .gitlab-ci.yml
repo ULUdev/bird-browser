@@ -15,7 +15,9 @@ build:
         stage: build
         script:
                 - python3 setup.py sdist bdist_wheel
-                - ls -alR
+                - git add .
+                - git commit -am "added build"
+                - git push
         rules:
                 - if: '$CI_COMMIT_BRANCH == "release"'
 deploy:
@@ -36,6 +38,9 @@ build birdlib:
         script:
                 - cd bird-browser
                 - python3 setup.py sdist bdist_wheel
+                - git add .
+                - git commit -am "added build"
+                - git push
         rules:
                 - if: '$CI_COMMIT_BRANCH == "release"'
 deploy birdlib:
