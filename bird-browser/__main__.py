@@ -98,6 +98,18 @@ class MainWindow(QMainWindow):
                 except:
                     bmk.addBookmark(cursor, parts[0], parts[1])
                     conn.commit()
+        elif url.startswith("file://"):
+            path = url.split("file://", 1)[1]
+            if path.startswith("~/"):
+                path = f"{Path.home()}/{path.split('~/', 1)[1]}"
+            try:
+                with open(path, "r") as reqfile:
+                    reqcontent = reqfile.read()
+                browser.page().setHtml(reqcontent)
+                return
+            except:
+                print(f"Error on requested page: Path '{path}' doesn't exist")
+                browser.page().loadUrl(QUrl("about:blank"))
         elif "additional-search-engines" in config:
             for source in config["additional-search-engines"]:
                 if url.startswith(source):

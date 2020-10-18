@@ -47,6 +47,6 @@ def addBookmark(cursor, name:str, url:str):
         pass
 def modifyBookmark(cursor, name:str, newname:str, newurl:str):
     try:
-    cursor.execute(sqlp.checksqlstatement(f"update bookmarks set name = '{newname}', url = '{newurl}' where name = '{name}'"))
+        cursor.execute(sqlp.checksqlstatement(f"update bookmarks set name = '{newname}', url = '{newurl}' where name = '{name}'"))
     except:
         pass
