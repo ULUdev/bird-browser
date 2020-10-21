@@ -3,7 +3,7 @@ from PyQt5.QtCore import *
 from PyQt5.QtWidgets import QPushButton, QTabWidget, QMainWindow, QLineEdit, QGridLayout, QGridLayout, QWidget, QApplication
 from PyQt5.QtGui import *
 from PyQt5 import uic
-from PyQt5.QtWebEngineWidgets import QWebEngineView
+from PyQt5.QtWebEngineWidgets import QWebEngineView, QWebEnginePage
 #local imports
 from birdlib import adblock
 from birdlib import bookmarks as bmk
@@ -71,9 +71,14 @@ class MainWindow(QMainWindow):
         self.tabcreate.clicked.connect(self.createtab)
         self.tabs.tabCloseRequested.connect(self.closetab)
 
+        #show window
         self.show()
 
     def updatewin(self, browser:QWebEngineView, boolean=True):
+        """
+        This Method updates the shown browser window to the current url of the search bar
+        it also contains the search engine-integration, and bookmarking
+        """
         url = self.url[str(self.tabs.currentIndex)]
         if url.startswith("search://"):
             search = url.split("search://", 1)[1]
@@ -125,10 +130,21 @@ class MainWindow(QMainWindow):
             url = "http://" + url
         browser.page().load(QUrl(url))
     def updatetext(self, text:str):
+        """
+        This Method updates the internal text of the search bar
+        """
         self.url[str(self.tabs.currentIndex)] = text
     def updateurl(self, url, bar):
+        """
+        This method updates the url bar to the currently displayed url.
+        It gets triggered if the displayed page directs you to a different page
+        """
         bar.setText(url.toString())
  
+    def setDevView(self, browser, clicked):
+        page = QWebEnginePage().setInspectedPage(browser.page())
+        browser.setPage(browser.page().inspectedPage())
+
     def updatetab(self, arg_1, index, browser):
         if len(browser.page().title()) > 20:
             self.tabs.setTabText(index , browser.page().title()[0:20] + "...")
@@ -155,6 +171,8 @@ class MainWindow(QMainWindow):
         backbtn = QPushButton("←")
         reloadbtn = QPushButton("reload")
         gotocurrenturlbutton = QPushButton("go!")
+        viewasdev = QPushButton("dev")
+        viewasdev.clicked.connect(lambda clicked, browser = browser: self.setDevView(browser, clicked))
         gotocurrenturlbutton.clicked.connect(lambda clicked, browser = browser: self.updatewin(browser, clicked))
         reloadbtn.clicked.connect(browser.reload)
         bar.returnPressed.connect(lambda  browser = browser: self.updatewin(browser, True))
@@ -167,9 +185,10 @@ class MainWindow(QMainWindow):
         backbtn.clicked.connect(browser.back)
         layout.addWidget(bar, 1, 3)
         layout.addWidget(reloadbtn, 1, 2)
-        layout.addWidget(browser, 2, 1, 1, 4)
+        layout.addWidget(browser, 2, 1, 1, 5)
         layout.addWidget(backbtn, 1, 1)
         layout.addWidget(gotocurrenturlbutton, 1, 4)
+        layout.addWidget(viewasdev, 1, 4)
         self.tabs.addTab(widget, browser.icon(), browser.title())
         self.tabs.setCurrentIndex(self.tabs.count() -1)
 
