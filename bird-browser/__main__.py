@@ -1,6 +1,6 @@
 #PyQt5
 from PyQt5.QtCore import *
-from PyQt5.QtWidgets import QPushButton, QTabWidget, QMainWindow, QLineEdit, QGridLayout, QGridLayout, QWidget, QApplication
+from PyQt5.QtWidgets import QPushButton, QTabWidget, QMainWindow, QLineEdit, QGridLayout, QGridLayout, QWidget, QApplication, QShortcut
 from PyQt5.QtGui import *
 from PyQt5 import uic
 from PyQt5.QtWebEngineWidgets import QWebEngineView, QWebEnginePage
@@ -50,6 +50,8 @@ class MainWindow(QMainWindow):
         uic.loadUi('browser.ui', self)
         self.tabs = self.findChild(QTabWidget, "tabs")
         self.tabcreate = self.findChild(QPushButton, "tabcreate")
+        self.shortcreatetab = QShortcut(self)
+        self.shortcreatetab.setKey("Ctrl+T")
 
         if "style" in config:
             innerstyle = f"""
@@ -68,6 +70,7 @@ class MainWindow(QMainWindow):
         self.createtab()
 
         #connections
+        self.shortcreatetab.activated.connect(self.createtab)
         self.tabcreate.clicked.connect(self.createtab)
         self.tabs.tabCloseRequested.connect(self.closetab)
 
@@ -158,6 +161,8 @@ class MainWindow(QMainWindow):
         self.tabs.removeTab(index)
         if self.tabs.count() == 0:
             sys.exit(0)
+    
+    @pyqtSlot()
     def createtab(self):
         layout = QGridLayout()
         widget = QWidget()
