@@ -141,10 +141,6 @@ class MainWindow(QMainWindow):
         """
         bar.setText(url.toString())
  
-    def setDevView(self, browser, clicked):
-        page = QWebEnginePage().setInspectedPage(browser.page())
-        browser.setPage(browser.page().inspectedPage())
-
     def updatetab(self, arg_1, index, browser):
         if len(browser.page().title()) > 20:
             self.tabs.setTabText(index , browser.page().title()[0:20] + "...")
@@ -171,8 +167,6 @@ class MainWindow(QMainWindow):
         backbtn = QPushButton("←")
         reloadbtn = QPushButton("reload")
         gotocurrenturlbutton = QPushButton("go!")
-        viewasdev = QPushButton("dev")
-        viewasdev.clicked.connect(lambda clicked, browser = browser: self.setDevView(browser, clicked))
         gotocurrenturlbutton.clicked.connect(lambda clicked, browser = browser: self.updatewin(browser, clicked))
         reloadbtn.clicked.connect(browser.reload)
         bar.returnPressed.connect(lambda  browser = browser: self.updatewin(browser, True))
@@ -188,7 +182,6 @@ class MainWindow(QMainWindow):
         layout.addWidget(browser, 2, 1, 1, 5)
         layout.addWidget(backbtn, 1, 1)
         layout.addWidget(gotocurrenturlbutton, 1, 4)
-        layout.addWidget(viewasdev, 1, 4)
         self.tabs.addTab(widget, browser.icon(), browser.title())
         self.tabs.setCurrentIndex(self.tabs.count() -1)
 
