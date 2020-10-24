@@ -1,6 +1,6 @@
 from pathlib import Path
 class Extension:
-    def __init__(self, name:str, version:str):
+    def __init__(self, name:str, version:str, browser=None):
         self._name = name
         self._version = version
 
