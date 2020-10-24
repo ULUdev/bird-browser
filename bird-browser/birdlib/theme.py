@@ -36,7 +36,6 @@ class ThemeLoader:
                 for line in file.readlines():
                     line = line.strip()
                     name, path = line.split(":", 1)
-                    themedict[name] = path
                     with open(f"{self.path}/themes/{path}", "r") as file:
                         themedict[name] = {
                                 file.read().split("\n")[0].strip().split(":")[0]: file.read().split("\n")[0].strip().split(":")[1],
