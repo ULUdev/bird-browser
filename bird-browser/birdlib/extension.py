@@ -1,3 +1,4 @@
+from pathlib import Path
 class Extension:
     def __init__(self, name:str, version:str):
         self._name = name
@@ -36,3 +37,12 @@ class Extension:
     @widget.setter
     def setwidget(self, widget):
         self._widget = widget
+
+    @staticmethod
+    def getConfigFile(path:str):
+        try:
+            with open(f"{Path.home()}/.config/bird/{path}", "r") as file:
+                strout = file.read()
+            return strout
+        except:
+            raise ValueError("path cant be loaded")
