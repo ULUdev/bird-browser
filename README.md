@@ -9,6 +9,7 @@ planed features are:
 - password manager integration
 - bookmarks
 - configuration
+- extensions
 some of these features weren't done by me before
 This Project also has an Adblocker build into it.
 ## Installation
