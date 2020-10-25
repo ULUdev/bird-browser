@@ -2,6 +2,8 @@ from pathlib import Path
 class Extender:
     def __init__(self, path:str):
         self._path = path
+    def __repr__(self):
+        return f"Extender at {self.path}"
     def loadPlugins(self):
         if not Path(f"{Path.home()}/.config/bird/plugins.config.inf").exists():
             raise Exception("setup not satisfied")
