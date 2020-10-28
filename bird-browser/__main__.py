@@ -1,6 +1,6 @@
 #PyQt5
 from PyQt5.QtCore import *
-from PyQt5.QtWidgets import QPushButton, QTabWidget, QMainWindow, QLineEdit, QGridLayout, QGridLayout, QWidget, QApplication, QShortcut
+from PyQt5.QtWidgets import QPushButton, QTabWidget, QMainWindow, QLineEdit, QGridLayout, QWidget, QApplication, QShortcut
 from PyQt5.QtGui import *
 from PyQt5 import uic
 from PyQt5.QtWebEngineWidgets import QWebEngineView, QWebEnginePage
