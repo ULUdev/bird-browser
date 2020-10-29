@@ -1,38 +1,40 @@
 image: python:3.8
 
 before_script:
-        - python3 -V
-        - python3 -m venv .
-        - source bin/activate
-        - pip3 install wheel
-        - pip3 install twine
+  - python3 -V
+  - python3 -m venv .
+  - source bin/activate
+  - pip3 install -U pip
+  - pip3 install wheel
+  - pip3 install twine
+  - pip3 -V
 
 cache:
-        paths:
-                - dist/*
-                - bird-browser/dist/*
+  paths:
+    - dist/*
+    - bird-browser/dist/*
 test:
-        stage: test
-        script:
-                - python3 setup.py test
-                - cd bird-browser
-                - python3 setup.py test
+  stage: test
+  script:
+    - python3 setup.py test
+    - cd bird-browser
+    - python3 setup.py test
 build:
-        stage: build
-        script:
-                - rm -rf dist/*
-                - rm -rf bird-browser/dist/*
-                - python3 setup.py sdist bdist_wheel
-                - cd bird-browser
-                - python3 setup.py sdist bdist_wheel
-        rules:
-                - if: '$CI_COMMIT_BRANCH == "release"'
+  stage: build
+  script:
+    - rm -rf dist/*
+    - rm -rf bird-browser/dist/*
+    - python3 setup.py sdist bdist_wheel
+    - cd bird-browser
+    - python3 setup.py sdist bdist_wheel
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "release"'
 deploy:
-        stage: deploy
-        script:
-                - TWINE_PASSWORD=$pypi_access TWINE_USERNAME=__token__ python3 -m twine upload dist/*
-                - TWINE_PASSWORD=$CI_JOB_TOKEN TWINE_USERNAME=gitlab-ci-token python3 -m twine upload --repository-url https://gitlab.sokoll.com/api/v4/projects/$CI_PROJECT_ID/packages/pypi dist/*
-                - cd bird-browser
-                - TWINE_PASSWORD=$CI_JOB_TOKEN TWINE_USERNAME=gitlab-ci-token python3 -m twine upload --repository-url https://gitlab.sokoll.com/api/v4/projects/$CI_PROJECT_ID/packages/pypi dist/*
-        rules:
-                - if: '$CI_COMMIT_BRANCH == "release"'
+  stage: deploy
+  script:
+    - TWINE_PASSWORD=$pypi_access TWINE_USERNAME=__token__ python3 -m twine upload dist/*
+    - TWINE_PASSWORD=$CI_JOB_TOKEN TWINE_USERNAME=gitlab-ci-token python3 -m twine upload --repository-url https://gitlab.sokoll.com/api/v4/projects/$CI_PROJECT_ID/packages/pypi dist/*
+    - cd bird-browser
+    - TWINE_PASSWORD=$CI_JOB_TOKEN TWINE_USERNAME=gitlab-ci-token python3 -m twine upload --repository-url https://gitlab.sokoll.com/api/v4/projects/$CI_PROJECT_ID/packages/pypi dist/*
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "release"'
