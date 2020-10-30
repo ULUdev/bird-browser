@@ -146,7 +146,7 @@ class MainWindow(QMainWindow):
  
     def updatetab(self, arg_1, index, browser):
         if len(browser.page().title()) > 20:
-            self.tabs.setTabText(index , browser.page().title()[0:20] + "...")
+            self.tabs.setTabText(index , browser.page().title()[0:17] + "...")
         else:
             self.tabs.setTabText(index, browser.page().title())
         self.tabs.setTabIcon(index, browser.page().icon())
@@ -172,6 +172,9 @@ class MainWindow(QMainWindow):
         backbtn = QPushButton("←")
         reloadbtn = QPushButton("reload")
         gotocurrenturlbutton = QPushButton("go!")
+        reloadshort = QShortcut(self)
+        reloadshort.setKey("Ctrl+R")
+        reloadshort.activated.connect(browser.reload)
         gotocurrenturlbutton.clicked.connect(lambda clicked, browser = browser: self.updatewin(browser, clicked))
         reloadbtn.clicked.connect(browser.reload)
         bar.returnPressed.connect(lambda  browser = browser: self.updatewin(browser, True))
