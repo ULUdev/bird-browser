@@ -20,5 +20,3 @@ def decrypt(key:int, pwd:str):
     return resstr
 def keygen():
     return random.randint(10000, 1000000)
-def setupDatabase(cursor):
-

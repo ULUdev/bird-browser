@@ -47,7 +47,10 @@ class MainWindow(QMainWindow):
         super(MainWindow, self).__init__(*args, **kwargs)
         self.url = {}
         self.setWindowTitle("Bird-Browser")
-        uic.loadUi('browser.ui', self)
+        try:
+            uic.loadUi('browser.ui', self)
+        except:
+            uic.loadUi(f"{Path.home()}/.config/bird/browser.ui", self)
         self.tabs = self.findChild(QTabWidget, "tabs")
         self.tabcreate = self.findChild(QPushButton, "tabcreate")
         self.shortcreatetab = QShortcut(self)
@@ -181,7 +184,7 @@ class MainWindow(QMainWindow):
         bar.textChanged.connect(self.updatetext)
         browser.load(QUrl(config["startup-url"]))
         browser.page().urlChanged.connect(lambda qurl, bar = bar: self.updateurl(qurl, bar))
-        browser.page().loadFinished.connect(lambda arg__1 ,index = self.tabs.count(), browser = browser: self.updatetab(arg__1, index, browser))
+        browser.page().loadFinished.connect(lambda arg__1 ,index = self.tabs.indexOf(browser), browser = browser: self.updatetab(arg__1, index, browser))
         browser.page().iconChanged.connect(lambda qicon, index = self.tabs.count(): self.updateicon(index, qicon))
         browser.page().setUrlRequestInterceptor(NetworkFilter)
         backbtn.clicked.connect(browser.back)
