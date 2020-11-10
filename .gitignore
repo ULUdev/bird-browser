@@ -10,3 +10,4 @@ build
 bird_browser.egg-info
 birdlib.egg-info
 dist
+.idea

@@ -17,7 +17,7 @@ from pathlib import Path
 #setup
 NetworkFilter = adblock.RequestManager()
 try:
-    NetworkFilter.setup("birdlib/easylist.txt")
+    NetworkFilter.setup()
 except:
     NetworkFilter.setup()
 conn = sql.connect(f"{Path.home()}/.config/bird/database.db")
