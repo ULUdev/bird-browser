@@ -5,7 +5,7 @@ from PyQt5.QtGui import *
 from PyQt5 import uic
 from PyQt5.QtWebEngineWidgets import QWebEngineView, QWebEnginePage
 #local imports
-from birdlib import adblock
+from birdlib import adblock, devtools
 from birdlib import bookmarks as bmk
 #additional imports
 import json
@@ -46,6 +46,9 @@ except:
 	pass
 #Window
 class MainWindow(QMainWindow):
+	"""
+	the main render proccess of the browser including all updating methods and the webview
+	"""
 	def __init__(self, *args, **kwargs):
 		super(MainWindow, self).__init__(*args, **kwargs)
 		self.url = {}
@@ -79,6 +82,7 @@ class MainWindow(QMainWindow):
 		self.shortcreatetab.activated.connect(self.createtab)
 		self.tabcreate.clicked.connect(self.createtab)
 		self.tabs.tabCloseRequested.connect(self.closetab)
+		self.tabs.setCornerWidget(self.tabcreate)
 
 		#show window
 		self.show()
@@ -124,6 +128,9 @@ class MainWindow(QMainWindow):
 			except:
 				print(f"Error on requested page: Path '{path}' doesn't exist")
 				browser.page().loadUrl(QUrl("about:blank"))
+		elif url.startswith("dev://"):
+			url = url.split("dev://", 1)[1]
+			self.tabs.addTab(devtools.DevToolWidget(url), "dev-tools")
 		elif "additional-search-engines" in config:
 			for source in config["additional-search-engines"]:
 				if url.startswith(source):
@@ -199,10 +206,8 @@ class MainWindow(QMainWindow):
 		layout.addWidget(gotocurrenturlbutton, 1, 4)
 		self.tabs.addTab(widget, browser.icon(), browser.title())
 		self.tabs.setCurrentIndex(self.tabs.count() -1)
-	def testMethod(self):
-		print(self)
 	def renderDevToolsView(self, webview):
-		pass
+		return self.tabs.setCurrentWidget(devtools.DevToolWidget(webview.page().url().toString()))
 
 #main process
 if __name__ == '__main__':
