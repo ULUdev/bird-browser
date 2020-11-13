@@ -131,6 +131,8 @@ class MainWindow(QMainWindow):
 				browser.page().loadUrl(QUrl("about:blank"))
 		elif url.startswith("dev://"):
 			url = url.split("dev://", 1)[1]
+			if not url.startswith("https://") or not url.startswith("http://"):
+				url = "http://" + url
 			self.tabs.addTab(devtools.DevToolWidget(url), "dev-tools")
 		elif "additional-search-engines" in config:
 			for source in config["additional-search-engines"]:
