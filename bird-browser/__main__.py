@@ -1,6 +1,6 @@
 #PyQt5
 from PyQt5.QtCore import *
-from PyQt5.QtWidgets import QPushButton, QTabWidget, QMainWindow, QLineEdit, QGridLayout, QWidget, QApplication, QShortcut
+from PyQt5.QtWidgets import QPushButton, QTabWidget, QMainWindow, QLineEdit, QGridLayout, QWidget, QApplication, QShortcut, QCompleter
 from PyQt5.QtGui import *
 from PyQt5 import uic
 from PyQt5.QtWebEngineWidgets import QWebEngineView, QWebEnginePage
@@ -53,6 +53,7 @@ class MainWindow(QMainWindow):
 		super(MainWindow, self).__init__(*args, **kwargs)
 		self.url = {}
 		self.setWindowTitle("Bird-Browser")
+		self.wordlist = ["dev://", "bookmark://", "bookmarks://", "search://"]
 		try:
 			uic.loadUi('browser.ui', self)
 		except:
@@ -145,6 +146,7 @@ class MainWindow(QMainWindow):
 		elif not url.startswith("https://") and not url.startswith("http://"):
 			url = "http://" + url
 		browser.page().load(QUrl(url))
+		self.wordlist.append(url)
 	def updatetext(self, text:str):
 		"""
 		This Method updates the internal text of the search bar
@@ -181,12 +183,14 @@ class MainWindow(QMainWindow):
 		widget = QWidget()
 		widget.setLayout(layout)
 		bar = QLineEdit()
+		completer = QCompleter(self.wordlist)
 		browser = QWebEngineView()
 		backbtn = QPushButton("←")
 		reloadbtn = QPushButton("reload")
 		gotocurrenturlbutton = QPushButton("go!")
 		reloadshort = QShortcut(self)
 		reloadshort.setKey("Ctrl+R")
+		bar.setCompleter(completer)
 		reloadshort.activated.connect(browser.reload)
 		gotocurrenturlbutton.clicked.connect(lambda clicked, browser = browser: self.updatewin(browser, clicked))
 		reloadbtn.clicked.connect(browser.reload)
