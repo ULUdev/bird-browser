@@ -3,13 +3,13 @@ The Bird Browser is a browser written in Python and Qt.
 The browser.ui file can be loaded in the qt-designer.
 This is how I want the browser to look at some point.
 Planed features are:
-[x] tabs
-[x] search engine integration
-[x] source-code view
-[ ] password manager integration
-[x] bookmarks
-[x] configuration
-[ ] extensions
+- [x] tabs
+- [x] search engine integration
+- [x] source-code view
+- [ ] password manager integration
+- [x] bookmarks
+- [x] configuration
+- [ ] extensions
 
 Some of these features weren't done by me before.
 This Project also has an Adblocker build into it.
