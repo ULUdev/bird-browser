@@ -2,10 +2,9 @@
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import QPushButton, QTabWidget, QMainWindow, QLineEdit, QGridLayout, QWidget, QApplication, QShortcut, QCompleter
 from PyQt5.QtGui import *
-from PyQt5 import uic
 from PyQt5.QtWebEngineWidgets import QWebEngineView, QWebEnginePage
 #local imports
-from birdlib import adblock, devtools
+from birdlib import adblock, devtools, pwdmanager
 from birdlib import bookmarks as bmk
 #additional imports
 import json
@@ -53,13 +52,9 @@ class MainWindow(QMainWindow):
 		super(MainWindow, self).__init__(*args, **kwargs)
 		self.url = {}
 		self.setWindowTitle("Bird-Browser")
-		self.wordlist = ["dev://", "bookmark://", "bookmarks://", "search://"]
-		try:
-			uic.loadUi('browser.ui', self)
-		except:
-			uic.loadUi(f"{Path.home()}/.config/bird/browser.ui", self)
-		self.tabs = self.findChild(QTabWidget, "tabs")
-		self.tabcreate = self.findChild(QPushButton, "tabcreate")
+		self.wordlist = ["dev://", "bookmark://", "bookmarks://", "search://", "http://", "https://"]
+		self.tabs = QTabWidget()
+		self.tabcreate = QPushButton("+")
 		self.shortcreatetab = QShortcut(self)
 		self.shortcreatetab.setKey("Ctrl+T")
 
@@ -73,6 +68,20 @@ class MainWindow(QMainWindow):
 					{innerstyle}
 				}
 					""")
+			self.tabs.setStyleSheet(f"""
+				QTabWidget{
+					{innerstyle}
+				}
+			""")
+		else:
+			self.setStyleSheet("""
+				background-color: rgb(50, 50, 50);
+				color: rgb(255, 255, 255);
+			""")
+			self.tabs.setStyleSheet("""
+				background-color: rgb(50, 50, 50);
+				color: rgb(255, 255, 255);
+			""")
 		self.tabs.clear()
 
 		self.tabs.setTabsClosable(True)
@@ -86,6 +95,7 @@ class MainWindow(QMainWindow):
 		self.tabs.setCornerWidget(self.tabcreate)
 
 		#show window
+		self.setCentralWidget(self.tabs)
 		self.show()
 
 	def updatewin(self, browser:QWebEngineView, boolean=True):
@@ -131,9 +141,12 @@ class MainWindow(QMainWindow):
 				browser.page().loadUrl(QUrl("about:blank"))
 		elif url.startswith("dev://"):
 			url = url.split("dev://", 1)[1]
-			if not url.startswith("https://") or not url.startswith("http://"):
+			if not url.startswith("https://") and not url.startswith("http://"):
 				url = "http://" + url
 			self.tabs.addTab(devtools.DevToolWidget(url), "dev-tools")
+		elif url.startswith("pwd://"):
+			self.tabs.addTab(pwdmanager.PwdManagerWidget(pwdmanager.PwdManager(69420, "hahahayes iam robot")), "69420")
+			return
 		elif "additional-search-engines" in config:
 			for source in config["additional-search-engines"]:
 				if url.startswith(source):
