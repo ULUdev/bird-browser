@@ -26,10 +26,11 @@ except FileNotFoundError:
 		file.write(json.dumps(
 			{
 				"search-engine": "https://duckduckgo.com/?q={search}",
-				"startup-url": "https://duckduckgo.com/"
+				"startup-url": "https://duckduckgo.com/",
+				"key": 12345
 			},
 			indent=4))
-		config = {"search-engine": "https://duckduckgo.com/?q={search}", "startup-url": "https://duckduckgo.com/"}
+		config = {"search-engine": "https://duckduckgo.com/?q={search}", "startup-url": "https://duckduckgo.com/", "key": 12345}
 
 try:
 	conn = sql.connect(f"{Path.home()}/.config/bird/database.db")
@@ -52,11 +53,13 @@ class MainWindow(QMainWindow):
 		super(MainWindow, self).__init__(*args, **kwargs)
 		self.url = {}
 		self.setWindowTitle("Bird-Browser")
-		self.wordlist = ["dev://", "bookmark://", "bookmarks://", "search://", "http://", "https://"]
+		self.wordlist = ["dev://", "bookmark://", "bookmarks://", "search://", "http://", "https://", "pwd://"]
 		self.tabs = QTabWidget()
 		self.tabcreate = QPushButton("+")
 		self.shortcreatetab = QShortcut(self)
 		self.shortcreatetab.setKey("Ctrl+T")
+		self.pwdman = pwdmanager.PwdManager(config["key"], f"{Path.home()}/.config/bird/database.db")
+		
 
 		if "style" in config:
 			innerstyle = f"""
@@ -145,7 +148,7 @@ class MainWindow(QMainWindow):
 				url = "http://" + url
 			self.tabs.addTab(devtools.DevToolWidget(url), "dev-tools")
 		elif url.startswith("pwd://"):
-			self.tabs.addTab(pwdmanager.PwdManagerWidget(pwdmanager.PwdManager(69420, "hahahayes iam robot")), "69420")
+			self.tabs.addTab(pwdmanager.PwdManagerWidget(self.pwdman), "Passwords")
 			return
 		elif "additional-search-engines" in config:
 			for source in config["additional-search-engines"]:
@@ -193,7 +196,7 @@ class MainWindow(QMainWindow):
 			sys.exit(0)
 	
 	@pyqtSlot()
-	def createtab(self):
+	def createtab(self, url:str=config["startup-url"]):
 		layout = QGridLayout()
 		widget = QWidget()
 		widget.setLayout(layout)
@@ -211,7 +214,7 @@ class MainWindow(QMainWindow):
 		reloadbtn.clicked.connect(browser.reload)
 		bar.returnPressed.connect(lambda  browser = browser: self.updatewin(browser, True))
 		bar.textChanged.connect(self.updatetext)
-		browser.load(QUrl(config["startup-url"]))
+		browser.load(QUrl(url))
 		browser.page().urlChanged.connect(lambda qurl, bar = bar: self.updateurl(qurl, bar))
 		browser.page().loadFinished.connect(lambda arg__1 ,index = self.tabs.indexOf(browser), browser = browser: self.updatetab(arg__1, index, browser))
 		browser.page().iconChanged.connect(lambda qicon, index = self.tabs.count(): self.updateicon(index, qicon))

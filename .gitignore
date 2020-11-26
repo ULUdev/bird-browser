@@ -12,3 +12,5 @@ birdlib.egg-info
 dist
 .idea
 .vscode
+test
+snap
