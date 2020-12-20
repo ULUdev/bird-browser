@@ -15,7 +15,7 @@
   </property>
   <property name="windowIcon">
    <iconset theme="Web">
-    <normaloff>.</normaloff>.</iconset>
+    <normaloff>../../../../.designer/backup/src</normaloff>../../../../.designer/backup/src</iconset>
   </property>
   <property name="styleSheet">
    <string notr="true">background-color: rgb(50, 50, 50);
@@ -23,7 +23,7 @@ color: rgb(255, 255, 255);</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
-    <item alignment="Qt::AlignRight|Qt::AlignBottom">
+    <item alignment="Qt::AlignRight">
      <widget class="QPushButton" name="tabcreate">
       <property name="minimumSize">
        <size>
@@ -69,35 +69,6 @@ color: rgb(255, 255, 255)</string>
    </layout>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
-  <widget class="QMenuBar" name="menubar">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>1075</width>
-     <height>20</height>
-    </rect>
-   </property>
-   <property name="cursor">
-    <cursorShape>ForbiddenCursor</cursorShape>
-   </property>
-   <property name="defaultUp">
-    <bool>true</bool>
-   </property>
-   <property name="nativeMenuBar">
-    <bool>true</bool>
-   </property>
-   <widget class="QMenu" name="bookmarks">
-    <property name="tearOffEnabled">
-     <bool>false</bool>
-    </property>
-    <property name="title">
-     <string>Bookmarks</string>
-    </property>
-    <addaction name="actionNew_Bookmark"/>
-   </widget>
-   <addaction name="bookmarks"/>
-  </widget>
   <action name="actionNew_Bookmark">
    <property name="text">
     <string>New Bookmark</string>
