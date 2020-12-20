@@ -1,8 +1,8 @@
 from pathlib import Path
 class Theme:
-    def __init__(self, color:str, background-color:str):
+    def __init__(self, color:str, bgcolor:str):
         self._color = color
-        self._background-color = background-color
+        self._bgcolor = bgcolor
     
     @property
     def path(self):
