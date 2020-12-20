@@ -6,7 +6,7 @@ Planed features are:
 - [x] tabs
 - [x] search engine integration
 - [x] source-code view
-- [ ] password manager integration
+- [x] password manager integration
 - [x] bookmarks
 - [x] configuration
 - [ ] extensions
