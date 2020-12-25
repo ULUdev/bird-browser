@@ -24,3 +24,5 @@ It contains more information on how to use the browser and how to install it.
 In the future there may be dev information
 ## License
 **GNU GPL 3**. For more information see the LICENSE file
+## CI
+[![pipeline status](https://gitlab.sokoll.com/moritz/minecraft/badges/master/pipeline.svg)](https://gitlab.sokoll.com/moritz/minecraft/-/commits/master)
