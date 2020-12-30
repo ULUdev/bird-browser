@@ -11,6 +11,8 @@ before_script:
   - pip3 install PyQtWebEngine
   - pip3 list
   - pip3 -V
+  - apt update
+  - apt install -y libgl1-mesa-dev
 
 cache:
   paths:

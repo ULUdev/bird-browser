@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 #PyQt5
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import QPushButton, QTabWidget, QMainWindow, QLineEdit, QGridLayout, QWidget, QApplication, QShortcut, QCompleter
