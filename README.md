@@ -25,4 +25,4 @@ In the future there may be dev information
 ## License
 **GNU GPL 3**. For more information see the LICENSE file
 ## CI
-[![pipeline status](https://gitlab.sokoll.com/moritz/minecraft/badges/master/pipeline.svg)](https://gitlab.sokoll.com/moritz/minecraft/-/commits/master)
+[![pipeline status](https://gitlab.sokoll.com/moritz/browser/badges/master/pipeline.svg)](https://gitlab.sokoll.com/moritz/browser/-/commits/master)
