@@ -15,8 +15,8 @@ before_script:
   - apt-get update
   - apt-get install -y libgl1-mesa-dev
   - apt-get install -y libfuse2
-  - apt-get install -y kmod
-  - modprobe fuse
+  #- apt-get install -y kmod
+  #- modprobe fuse
 
 cache:
   paths:
