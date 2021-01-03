@@ -40,7 +40,7 @@ build:
     - cd bird-browser
     - python3 setup.py sdist bdist_wheel
   rules:
-    - if:  == release
+    - if: '$CI_COMMIT_BRANCH == "release"'
   tags:
     - x86_64
   artifacts:
@@ -54,6 +54,6 @@ deploy:
     - cd bird-browser
     - TWINE_PASSWORD=$CI_JOB_TOKEN TWINE_USERNAME=gitlab-ci-token python3 -m twine upload --repository-url https://gitlab.sokoll.com/api/v4/projects/$CI_PROJECT_ID/packages/pypi dist/*
   rules:
-    - if:  == release
+    - if: '$CI_COMMIT_BRANCH == "release"'
   tags:
     - x86_64
