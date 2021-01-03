@@ -1,4 +1,4 @@
-image: python:3.8
+image: python:3.9
 
 before_script:
   - python3 -V
@@ -9,8 +9,11 @@ before_script:
   - pip3 install twine
   - pip3 install PyQt5
   - pip3 install PyQtWebEngine
+  - pip3 install pytest
   - pip3 list
   - pip3 -V
+  - apt update
+  - apt install -y libgl1-mesa-dev
 
 cache:
   paths:
@@ -19,19 +22,30 @@ cache:
 test:
   stage: test
   script:
-    - python3 setup.py test
+    - pytest .
     - cd bird-browser
-    - python3 setup.py test
+    - pytest .
+  tags:
+    - x86_64
 build:
   stage: build
   script:
+    - mkdir appimage
+    - wget https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage -O appimage/appimagetool
+    - chmod +x appimage/appimagetool
     - rm -rf dist/*
     - rm -rf bird-browser/dist/*
     - python3 setup.py sdist bdist_wheel
+    - ./appimage/appimagetool bird-browser/
     - cd bird-browser
     - python3 setup.py sdist bdist_wheel
   rules:
-    - if: '$CI_COMMIT_BRANCH == "release"'
+    - if:  == release
+  tags:
+    - x86_64
+  artifacts:
+    paths:
+      - ./*.AppImage
 deploy:
   stage: deploy
   script:
@@ -40,4 +54,6 @@ deploy:
     - cd bird-browser
     - TWINE_PASSWORD=$CI_JOB_TOKEN TWINE_USERNAME=gitlab-ci-token python3 -m twine upload --repository-url https://gitlab.sokoll.com/api/v4/projects/$CI_PROJECT_ID/packages/pypi dist/*
   rules:
-    - if: '$CI_COMMIT_BRANCH == "release"'
+    - if:  == release
+  tags:
+    - x86_64
