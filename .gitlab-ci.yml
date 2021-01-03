@@ -37,7 +37,7 @@ build:
     - rm -rf dist/*
     - rm -rf bird-browser/dist/*
     - python3 setup.py sdist bdist_wheel
-    - ./appimage/appimagetool bird-browser/
+    - ./appimage/appimagetool ./bird-browser/
     - cd bird-browser
     - python3 setup.py sdist bdist_wheel
   rules:
