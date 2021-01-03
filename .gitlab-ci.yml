@@ -12,10 +12,10 @@ before_script:
   - pip3 install pytest
   - pip3 list
   - pip3 -V
-  - apt update
-  - apt install -y libgl1-mesa-dev
-  - apt install libfuse2
-  - apt install kmod
+  - apt-get update
+  - apt-get install -y libgl1-mesa-dev
+  - apt-get install -y libfuse2
+  - apt-get install -y kmod
   - modprobe fuse
 
 cache:
