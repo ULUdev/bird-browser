@@ -26,3 +26,4 @@ In the future there may be dev information
 **GNU GPL 3**. For more information see the LICENSE file
 ## CI
 [![pipeline status](https://gitlab.sokoll.com/moritz/browser/badges/master/pipeline.svg)](https://gitlab.sokoll.com/moritz/browser/-/commits/master)
+successfully built AppImages can be found in the job Artifacts on Gitlab
