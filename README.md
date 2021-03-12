@@ -1,3 +1,6 @@
+# Attention
+This Repository is not being worked on. No Issues will be fixed. No Pull/Merge requests will be processed.
+I will start a similar project later with C++, Gtk and WebKitGtk.
 # Bird Browser
 The Bird Browser is a browser written in Python and Qt.
 The browser.ui file can be loaded in the qt-designer.
